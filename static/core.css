@@ -1,0 +1,22 @@
+body {
+    background-color: #a2b7ac;
+}
+
+span {
+    font-family: sans-serif;
+}
+
+.center-text {
+    text-align: center;
+}
+
+.message {
+    width: 400px;
+    height: 200px;
+}
+
+.footnote{
+    font-family: serif;
+    font-weight: 100;
+    font-weight: 100;
+}

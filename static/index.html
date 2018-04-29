@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AlphabetScramble</title>
+    <link rel="stylesheet" type="text/css" href="core.css">
+</head>
+<body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+<div>
+    <span id="alpha" class="center-text"></span><br/>
+    <button onclick="refreshCypher()">Regenerate</button><br/>
+    <span id="cypher" class="center">Getting cypher text...</span>
+</div>
+
+<textarea id="message" class="message"></textarea><br/>
+<button onclick="crypt(cypher.encrypt)">Encrypt</button>
+<button onclick="crypt(cypher.decrypt)">Decrypt</button><br/>
+<span class="footnote">version [1.0.0] !some features due to change!</span>
+
+
+<script type="text/javascript">
+var cypher;
+
+    $.ajax({
+        dataType: "json",
+        url: "/alphabet"
+    }).done(function(data) {
+        cypher = data;
+
+        setTimeout(function() { $("#cypher").text(data.cypher) }, 500);
+        $("#alpha").text(data.alpha)
+    });
+
+    function crypt(cryptMap) {
+        var message = encodeURIComponent($("#message").val());
+        var newMessage = "";
+        for (var i = 0; i < message.length; i++) {
+            var mChar = message[i];
+            if (mChar in cypher.encrypt)
+                newMessage += cryptMap[mChar];
+            else
+                newMessage += mChar;
+        }
+        $("#message").val(decodeURIComponent(newMessage));
+    }
+
+    function refreshCypher() {
+        if (!confirm('This will cripple all future communications with the current cypher. Are you sure?'))
+            return;
+
+        $.ajax({
+            dataType: "json",
+            url: "/refresh"
+        }).done(function(data) {
+            cypher = data;
+            setTimeout(function() { $("#cypher").text(data.cypher) }, 500);
+            $("#alpha").text(data.alpha)
+        });
+    }
+
+</script>
+</body>
+</html>
